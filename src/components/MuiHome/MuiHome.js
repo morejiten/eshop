@@ -2,54 +2,26 @@ import {  Stack,  } from "@mui/material";
 import MuiCard from "../MuiCard/MuiCard.js";
 import MuiFilter from "../MuiFilter/MuiFilter.js";
 import MuiToggleButtons from "../MuiToggleButtons/MuiToggleButtons.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const MuiHome = () => {
+  const [products, setProducts] = useState([]);
 
-  const [qty, setQty] = useState('');
 
-  const handleChange = (event) => {
-    setQty(event.target.value);
-  };
 
- 
 
-  const productLitst = [
-    {
-    "name": "first",
-    "image": "https://placehold.co/600x400/EEE/31343C",
-    "description": "Antarcticaranging across all continents except AntarcticaShoe ranging across",
-    "price": "500"
-  },
-  {
-    "name": "seocond",
-    "image": "https://placehold.co/400x400/EEE/31343C",
-    "description": "Shoe ranging across all continents except Antarcticaranging across all continents except Antarctica",
-    "price": "400"
-  },{
-    "name": "first",
-    "image": "https://placehold.co/600x400/EEE/31343C",
-    "description": "Antarcticaranging across all continents except AntarcticaShoe ranging across",
-    "price": "500"
-  },
-  {
-    "name": "seocond",
-    "image": "https://placehold.co/400x400/EEE/31343C",
-    "description": "Shoe ranging across all continents except Antarcticaranging across all continents except Antarctica",
-    "price": "400"
-  },{
-    "name": "first",
-    "image": "https://placehold.co/600x400/EEE/31343C",
-    "description": "Antarcticaranging across all continents except AntarcticaShoe ranging across",
-    "price": "500"
-  },
-  {
-    "name": "seocond",
-    "image": "https://placehold.co/400x400/EEE/31343C",
-    "description": "Shoe ranging across all continents except Antarcticaranging across all continents except Antarctica",
-    "price": "400"
-  }
-]
+  const productApiEndpoint = "http://localhost:3333/products";
 
+  function getProductList() {
+      fetch(productApiEndpoint) 
+      .then(response => response.json())
+      .then(data => setProducts( data));
+    }
+
+useEffect(() => {
+  getProductList();
+}, []);
+
+console.log("products....",products);
 
   return (
     <div className="full-container">
@@ -60,7 +32,7 @@ const MuiHome = () => {
         <MuiFilter></MuiFilter>
         </Stack>
       <Stack alignItems="center" direction="row"  spacing={{ xs: 1, sm: 2 }}   sx={{ flexWrap: 'wrap' }}>
-    {productLitst.map(({name, image, description, price}) => {
+    {products.map(({name, image, description, price}) => {
         return <MuiCard name={name} image={image} description={description} price={price} />
       }
       )}
