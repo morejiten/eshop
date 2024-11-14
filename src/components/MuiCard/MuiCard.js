@@ -6,17 +6,14 @@ import { Link } from 'react-router-dom';
 const MuiCard = ({name, image, price, description}) => {
   
   let isUserAdmin = true;
-  
-
   return (<>
-
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
         <CardMedia
           component="img"
           height="140"
           image={image}
-          alt="green iguana"
+          alt={name}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" aligm="left" component="span" inline >

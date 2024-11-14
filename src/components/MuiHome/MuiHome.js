@@ -6,10 +6,8 @@ import { useState, useEffect } from "react";
 const MuiHome = () => {
   const [products, setProducts] = useState([]);
 
-
-
-
-  const productApiEndpoint = "http://localhost:3333/products";
+  // TODO: move base URL to a config
+  const productApiEndpoint = "https://dev-project-ecommerce.upgrad.dev/api/products";
 
   function getProductList() {
       fetch(productApiEndpoint) 
@@ -32,8 +30,8 @@ console.log("products....",products);
         <MuiFilter></MuiFilter>
         </Stack>
       <Stack alignItems="center" direction="row"  spacing={{ xs: 1, sm: 2 }}   sx={{ flexWrap: 'wrap' }}>
-    {products.map(({name, image, description, price}) => {
-        return <MuiCard name={name} image={image} description={description} price={price} />
+    {products.map(({name, imageUrl, description, price}) => {
+        return <MuiCard name={name} image={imageUrl} description={description} price={price} />
       }
       )}
      
