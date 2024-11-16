@@ -9,16 +9,22 @@ const MuiHome = () => {
   const [categories, setCategories] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [sortedProducts, setSortedProducts] = useState(products);
 
   const baseUrl = "http://dev-project-ecommerce.upgrad.dev/api";
   const productApiEndpoint = `${baseUrl}/products`;
   const categoriesApiEndpoint = `${baseUrl}/products/categories`;
 
+  // Pass this to the ProductFilter component
+  const handleSortChange = (newSortedProducts) => {
+    setSortedProducts(newSortedProducts);
+  };
+
   // Handle category change
   const handleCategoryChange = (category) => {
     console.log("Category changed to:", category);
     setSelectedCategory(category);
-    
+
     if (category === 'all') {
       setFilteredProducts(products);
     } else {
@@ -68,28 +74,28 @@ const MuiHome = () => {
   return (
     <div className="full-container">
       <Stack alignItems="center" direction="column" spacing={20}>
-        <MuiToggleButtons 
-          categories={categories} 
+        <MuiToggleButtons
+          categories={categories}
           selectedCategory={selectedCategory}
           onCategoryChange={handleCategoryChange}
         />
       </Stack>
       <Stack alignItems="left" direction="row" spacing={20} sx={{ width: 700 }}>
-        <MuiFilter />
+        <MuiFilter products={products} onSortChange={handleSortChange} />
       </Stack>
-      <Stack 
-        alignItems="center" 
-        direction="row" 
-        spacing={{ xs: 1, sm: 2 }} 
+      <Stack
+        alignItems="center"
+        direction="row"
+        spacing={{ xs: 1, sm: 2 }}
         sx={{ flexWrap: 'wrap' }}
       >
         {filteredProducts.map(({ name, imageUrl, description, price }, index) => (
-          <MuiCard 
+          <MuiCard
             key={index}
-            name={name} 
-            image={imageUrl} 
-            description={description} 
-            price={price} 
+            name={name}
+            image={imageUrl}
+            description={description}
+            price={price}
           />
         ))}
       </Stack>

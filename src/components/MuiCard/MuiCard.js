@@ -1,51 +1,70 @@
-import { IconButton, Card, CardContent, CardMedia, Typography, Button, CardActionArea, CardActions } from "@mui/material";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  IconButton,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+  CardActions,
+  Box,
+} from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import image1 from "../../assets/iphone-14-thumbnail.png";
-import { Link } from 'react-router-dom';
-const MuiCard = ({name, image, price, description}) => {
-  
+import { Link } from "react-router-dom";
+
+const MuiCard = ({ name, image, price, description }) => {
   let isUserAdmin = true;
-  return (<>
-    <Card sx={{ maxWidth: 345 }}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          height="140"
-          image={image}
-          alt={name}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" aligm="left" component="span" inline >
+
+  return (
+    <Card sx={{ maxWidth: 345, margin: "auto", border: "1px solid #ddd" }}>
+      {/* Product Image */}
+      <CardMedia
+        component="img"
+        height="200"
+        image={image}
+        alt={name}
+        sx={{ objectFit: "contain", padding: 2 }}
+      />
+
+      {/* Product Details */}
+      <CardContent>
+        {/* Name and Price Row */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
             {name}
           </Typography>
-          <Typography gutterBottom variant="h5" component="span" align="right" inline>
-            {price}
+          <Typography variant="h6" color="primary" sx={{ fontWeight: "bold" }}>
+            ₹ {price}
           </Typography>
+        </Box>
 
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {description} 
-          </Typography>
+        {/* Description */}
+        <Typography variant="body2" color="text.secondary" sx={{ marginTop: 1 }}>
+          {description}
+        </Typography>
+      </CardContent>
 
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
+      {/* Actions (Buy and Admin Options) */}
+      <CardActions sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        {/* BUY Button */}
         <Button size="small" variant="contained" color="primary">
-          Share
+          BUY
         </Button>
 
-{ isUserAdmin && <>        <IconButton aria-label="Example"  component={Link} to="/editProduct">
-          <FontAwesomeIcon icon={faEdit} />
-        </IconButton>
-        <IconButton aria-label="Example"  component={Link} to="/deleteProduct">
-          <FontAwesomeIcon icon={faTrash} />
-        </IconButton>
-        </>
-}       
-
+        {/* Admin Icons */}
+        {isUserAdmin && (
+          <Box>
+            <IconButton aria-label="edit product" component={Link} to="/editProduct">
+              <FontAwesomeIcon icon={faEdit} />
+            </IconButton>
+            <IconButton aria-label="delete product" component={Link} to="/deleteProduct">
+              <FontAwesomeIcon icon={faTrash} />
+            </IconButton>
+          </Box>
+        )}
       </CardActions>
     </Card>
-  </>);
-}
+  );
+};
 
 export default MuiCard;

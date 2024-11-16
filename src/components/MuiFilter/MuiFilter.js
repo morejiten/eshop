@@ -1,11 +1,30 @@
 import { InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 import { useState } from "react";
-const MuiFilter = () => {
+const MuiFilter = (products, onSortChange) => {
 
-  const [age, setAge] = useState('latest');
+  const [sortValue, setSortValue] = useState('default');
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  const handleSortChange = (event) => {
+    const value = event.target.value; // Extract the value from the event
+    setSortValue(value);
+  
+    console.log("products to filter:", products);
+    let sortedProducts = [...products.products];
+  
+    console.log("sorting type: ", value);
+    switch (value) {
+      case 'htl':
+        sortedProducts.sort((a, b) => b.price - a.price);
+        break;
+      case 'lth':
+        sortedProducts.sort((a, b) => a.price - b.price);
+        break;
+      default:
+        // Keep original order for 'default' and 'latest'
+        sortedProducts = [...products.products];
+    }
+  
+    products.onSortChange(sortedProducts);
   };
 
   return (<>
@@ -14,13 +33,11 @@ const MuiFilter = () => {
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
-        value={age}
+        value={sortValue}
         label="Sort by:"
-        onChange={handleChange}
+        onChange={handleSortChange}
       >
-        <MenuItem value="default">
-          <em>Newest</em>
-        </MenuItem>
+        <MenuItem value="default"><em>Default</em></MenuItem>
         <MenuItem value="htl">Price: High to Low</MenuItem>
         <MenuItem value="lth">  Price: Low to Hight</MenuItem>
         <MenuItem value="latest">Newest</MenuItem>
