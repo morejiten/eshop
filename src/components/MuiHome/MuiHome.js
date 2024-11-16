@@ -7,13 +7,29 @@ import { useState, useEffect } from "react";
 const MuiHome = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
-  // API endpoints
   const baseUrl = "http://dev-project-ecommerce.upgrad.dev/api";
   const productApiEndpoint = `${baseUrl}/products`;
   const categoriesApiEndpoint = `${baseUrl}/products/categories`;
 
-  // Separate function to fetch categories
+  // Handle category change
+  const handleCategoryChange = (category) => {
+    console.log("Category changed to:", category);
+    setSelectedCategory(category);
+    
+    if (category === 'all') {
+      setFilteredProducts(products);
+    } else {
+      const filtered = products.filter(
+        product => product.category.toLowerCase() === category.toLowerCase()
+      );
+      console.log("Filtered products:", filtered);
+      setFilteredProducts(filtered);
+    }
+  };
+
   function getCategoriesList() {
     console.log("Fetching categories from API");
     fetch(categoriesApiEndpoint)
@@ -35,35 +51,31 @@ const MuiHome = () => {
       .then(data => {
         console.log("Products API Response:", data);
         setProducts(data);
+        setFilteredProducts(data); // Initialize filtered products with all products
       })
       .catch(error => {
         console.error("Error fetching products:", error);
         setProducts([]);
+        setFilteredProducts([]);
       });
   }
 
-  // Fetch both products and categories when component mounts
   useEffect(() => {
     getProductList();
     getCategoriesList();
   }, []);
 
-  // Log state updates
-  useEffect(() => {
-    console.log("Products state updated:", products);
-  }, [products]);
-
-  useEffect(() => {
-    console.log("Categories state updated:", categories);
-  }, [categories]);
-
   return (
     <div className="full-container">
       <Stack alignItems="center" direction="column" spacing={20}>
-        <MuiToggleButtons categories={categories}></MuiToggleButtons>
+        <MuiToggleButtons 
+          categories={categories} 
+          selectedCategory={selectedCategory}
+          onCategoryChange={handleCategoryChange}
+        />
       </Stack>
       <Stack alignItems="left" direction="row" spacing={20} sx={{ width: 700 }}>
-        <MuiFilter></MuiFilter>
+        <MuiFilter />
       </Stack>
       <Stack 
         alignItems="center" 
@@ -71,7 +83,7 @@ const MuiHome = () => {
         spacing={{ xs: 1, sm: 2 }} 
         sx={{ flexWrap: 'wrap' }}
       >
-        {products.map(({ name, imageUrl, description, price }, index) => (
+        {filteredProducts.map(({ name, imageUrl, description, price }, index) => (
           <MuiCard 
             key={index}
             name={name} 
