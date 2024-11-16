@@ -81,13 +81,14 @@ const MuiHome = () => {
         />
       </Stack>
       <Stack alignItems="left" direction="row" spacing={20} sx={{ width: 700 }}>
-        <MuiFilter products={products} onSortChange={handleSortChange} />
+        {/* Pass products and handleSortChange to MuiFilter */}
+        <MuiFilter products={filteredProducts} onSortChange={setFilteredProducts} />
       </Stack>
       <Stack
         alignItems="center"
         direction="row"
         spacing={{ xs: 1, sm: 2 }}
-        sx={{ flexWrap: 'wrap' }}
+        sx={{ flexWrap: "wrap" }}
       >
         {filteredProducts.map(({ name, imageUrl, description, price }, index) => (
           <MuiCard
