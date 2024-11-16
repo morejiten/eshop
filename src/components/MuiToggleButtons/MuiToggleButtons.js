@@ -1,17 +1,23 @@
-
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { useState } from "react";
-const MuiToggleButtons = () => {
+import { useState, useEffect } from "react";
 
+const MuiToggleButtons = ({ categories }) => {
   const [alignment, setAlignment] = useState('all');
 
+  useEffect(() => {
+    console.log("MuiToggleButtons - Received categories:", categories);
+  }, [categories]);
+
   const handleChange = (event, newAlignment) => {
+    console.log("Toggle button changed to:", newAlignment);
     setAlignment(newAlignment);
   };
 
+  const categoryOptions = ['all', ...(Array.isArray(categories) ? categories : [])];
 
-  return (<>
+  console.log("MuiToggleButtons - Available options:", categoryOptions);
 
+  return (
     <ToggleButtonGroup
       size="small"
       color="primary"
@@ -20,12 +26,16 @@ const MuiToggleButtons = () => {
       onChange={handleChange}
       aria-label="Platform"
     >
-      <ToggleButton value="all">All</ToggleButton>
-      <ToggleButton value="apparel">Apparel</ToggleButton>
-      <ToggleButton value="electronics">Electronics</ToggleButton>
-      <ToggleButton value="personalCare">Personal Care</ToggleButton>
+      {categoryOptions.map((category, index) => (
+        <ToggleButton 
+          key={index} 
+          value={category.toLowerCase()}
+        >
+          {category.charAt(0).toUpperCase() + category.slice(1)}
+        </ToggleButton>
+      ))}
     </ToggleButtonGroup>
-  </>);
-}
+  );
+};
 
 export default MuiToggleButtons;
