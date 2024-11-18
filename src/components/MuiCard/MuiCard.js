@@ -10,14 +10,18 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const MuiCard = ({ name, image, price, description }) => {
-  let isUserAdmin = true;
+const MuiCard = ({ name, image, price, description, product }) => {
+  const navigate = useNavigate();
+  const isUserAdmin = true;
+
+  const handleEdit = () => {
+    navigate("/editProduct", { state: { product } }); // Pass product data to Edit Product page
+  };
 
   return (
     <Card sx={{ maxWidth: 345, margin: "auto", border: "1px solid #ddd" }}>
-      {/* Product Image */}
       <CardMedia
         component="img"
         height="200"
@@ -25,10 +29,7 @@ const MuiCard = ({ name, image, price, description }) => {
         alt={name}
         sx={{ objectFit: "contain", padding: 2 }}
       />
-
-      {/* Product Details */}
       <CardContent>
-        {/* Name and Price Row */}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
             {name}
@@ -37,27 +38,20 @@ const MuiCard = ({ name, image, price, description }) => {
             ₹ {price}
           </Typography>
         </Box>
-
-        {/* Description */}
         <Typography variant="body2" color="text.secondary" sx={{ marginTop: 1 }}>
           {description}
         </Typography>
       </CardContent>
-
-      {/* Actions (Buy and Admin Options) */}
       <CardActions sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        {/* BUY Button */}
         <Button size="small" variant="contained" color="primary">
           BUY
         </Button>
-
-        {/* Admin Icons */}
         {isUserAdmin && (
           <Box>
-            <IconButton aria-label="edit product" component={Link} to="/editProduct">
+            <IconButton aria-label="edit product" onClick={handleEdit}>
               <FontAwesomeIcon icon={faEdit} />
             </IconButton>
-            <IconButton aria-label="delete product" component={Link} to="/deleteProduct">
+            <IconButton aria-label="delete product">
               <FontAwesomeIcon icon={faTrash} />
             </IconButton>
           </Box>

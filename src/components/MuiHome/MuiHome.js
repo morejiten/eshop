@@ -97,6 +97,7 @@ const MuiHome = () => {
             image={imageUrl}
             description={description}
             price={price}
+            product={filteredProducts[index]}
           />
         ))}
       </Stack>
