@@ -26,7 +26,7 @@ function App() {
         <section id="bodyContent"><Routes>
           <Route exact path="/" element={<MuiHome />} />
           <Route exact path="/home" element={<MuiHome />} />
-
+          <Route path="/viewProduct" element={<MuiViewProduct />} />
           <Route path="/editProduct" element={<MuiEditProduct />} />
           <Route path="/addProduct" element={<MuiAddProduct />} />
           <Route path="/about" element={<MuiAppBar />} />
