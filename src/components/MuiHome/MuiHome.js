@@ -11,7 +11,7 @@ const MuiHome = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortedProducts, setSortedProducts] = useState(products);
 
-  const baseUrl = "http://dev-project-ecommerce.upgrad.dev/api";
+  const baseUrl = "https://dev-project-ecommerce.upgrad.dev/api";
   const productApiEndpoint = `${baseUrl}/products`;
   const categoriesApiEndpoint = `${baseUrl}/products/categories`;
 

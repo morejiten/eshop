@@ -24,7 +24,7 @@ const MuiAddProduct = () => {
   const [imageUrl, setImageUrl] = useState("");
 
   // API endpoints
-  const baseUrl = "http://dev-project-ecommerce.upgrad.dev/api";
+  const baseUrl = "https://dev-project-ecommerce.upgrad.dev/api";
   const productApiEndpoint = `${baseUrl}/products`;
   const categoriesApiEndpoint = `${baseUrl}/products/categories`;
 
@@ -45,35 +45,45 @@ const MuiAddProduct = () => {
 
   // Add a new product
   const addProduct = (event) => {
-    event.preventDefault(); // Prevent form submission from refreshing the page
+    event.preventDefault(); // Prevent default form submission behavior
 
     const newProduct = {
       name: name || "Not Provided",
       category: selectedCategory || "Uncategorized",
-      image: imageUrl || "https://placehold.co/400x400/EEE/31343C",
+      imageUrl: imageUrl || "https://placehold.co/400x400/EEE/31343C",
       description: description || "No description available",
       manufacturer: manufacturer || "Unknown Manufacturer",
       availableItems: parseInt(availableItems) || 0,
       price: parseFloat(price) || 0,
     };
 
+    const token = localStorage.getItem('authToken');
+
     fetch(productApiEndpoint, {
       method: "POST",
       headers: {
+        "x-auth-token": token, // Add the required authentication token
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newProduct),
+      body: JSON.stringify(newProduct), // Send the product data as JSON
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) {
+          return response.json(); // Parse JSON if request was successful
+        } else {
+          throw new Error("Failed to add product");
+        }
+      })
       .then((data) => {
         console.log("Product added successfully:", data);
         alert("Product added successfully!");
       })
       .catch((error) => {
         console.error("Error adding product:", error);
-        alert("Failed to add product.");
+        alert("Failed to add product. Please try again.");
       });
   };
+
 
   // Fetch categories when the component loads
   useEffect(() => {
