@@ -6,6 +6,7 @@ import {
   Typography,
   TextField,
   Button,
+  Chip,
 } from "@mui/material";
 
 const MuiViewProduct = () => {
@@ -20,7 +21,14 @@ const MuiViewProduct = () => {
         </Grid>
         <Grid item xs={8}>
           <Stack spacing={2}>
-            <Typography variant="h5">{product.name}</Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Typography variant="h5">{product.name}</Typography>
+              <Chip
+                label={`Available Quantity: ${product.availableItems}`}
+                color="primary"
+                size="small"
+              />
+            </Box>
             <Typography variant="body2">Category: {product.category}</Typography>
             <Typography variant="body2">{product.description}</Typography>
             <Typography variant="h5">Price: ₹{product.price}</Typography>
