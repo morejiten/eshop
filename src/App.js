@@ -13,33 +13,33 @@ import MuiEditProduct from './components/MuiEditProduct/MuiEditProduct.js';
 import MuiViewProduct from './components/MuiViewProduct/MuiViewProduct.js';
 import MuiHome from './components/MuiHome/MuiHome.js';
 
-import { BrowserRouter as Router, Link} from "react-router-dom";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 ;
 function App() {
   return (
 
-<Router>
-<div className="App">      
-<MuiAppBar />
-        
-<section id="bodyContent"><Routes>
-          <Route exact path="/" element={<MuiHome/>} />
-          <Route exact path="/home" element={<MuiHome/>} />
-          
+    <Router>
+      <div className="App">
+        <MuiAppBar />
+
+        <section id="bodyContent"><Routes>
+          <Route exact path="/" element={<MuiHome />} />
+          <Route exact path="/home" element={<MuiHome />} />
+
           <Route path="/editProduct" element={<MuiEditProduct />} />
           <Route path="/addProduct" element={<MuiAddProduct />} />
           <Route path="/about" element={<MuiAppBar />} />
-          <Route path="/signUp" element={<MuiSignUp/>} />
-          <Route path="/login" element={<MuiLogin/>} />
+          <Route path="/signUp" element={<MuiSignUp />} />
+          <Route path="/login" element={<MuiLogin />} />
         </Routes>
-</section>
+        </section>
         <MuiFooter></MuiFooter>
       </div>
-      
+
     </Router>
 
-        
+
   );
 }
 

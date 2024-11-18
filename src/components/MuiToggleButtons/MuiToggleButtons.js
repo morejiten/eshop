@@ -1,31 +1,40 @@
-
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { useState } from "react";
-const MuiToggleButtons = () => {
+import { useEffect } from "react";
 
-  const [alignment, setAlignment] = useState('all');
+const MuiToggleButtons = ({ categories, selectedCategory = 'all', onCategoryChange }) => {
+  useEffect(() => {
+    console.log("MuiToggleButtons - Received categories:", categories);
+  }, [categories]);
 
-  const handleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
+  const handleChange = (event, newCategory) => {
+    // Prevent deselection of all buttons
+    if (newCategory !== null) {
+      console.log("Toggle button changed to:", newCategory);
+      onCategoryChange(newCategory);
+    }
   };
 
+  const categoryOptions = ['all', ...(Array.isArray(categories) ? categories : [])];
 
-  return (<>
-
+  return (
     <ToggleButtonGroup
       size="small"
       color="primary"
-      value={alignment}
+      value={selectedCategory}
       exclusive
       onChange={handleChange}
-      aria-label="Platform"
+      aria-label="Product Categories"
     >
-      <ToggleButton value="all">All</ToggleButton>
-      <ToggleButton value="apparel">Apparel</ToggleButton>
-      <ToggleButton value="electronics">Electronics</ToggleButton>
-      <ToggleButton value="personalCare">Personal Care</ToggleButton>
+      {categoryOptions.map((category, index) => (
+        <ToggleButton 
+          key={index} 
+          value={category.toLowerCase()}
+        >
+          {category.charAt(0).toUpperCase() + category.slice(1)}
+        </ToggleButton>
+      ))}
     </ToggleButtonGroup>
-  </>);
-}
+  );
+};
 
 export default MuiToggleButtons;
