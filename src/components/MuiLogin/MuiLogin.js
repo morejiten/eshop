@@ -1,5 +1,5 @@
 import { pink } from "@mui/material/colors";
-import axios from 'axios';
+import axios from "axios";
 import {
   FormControl,
   TextField,
@@ -20,41 +20,47 @@ const MuiLogin = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-  
-    const loginEndpoint = "https://dev-project-ecommerce.upgrad.dev/api/auth/signin";
-  
+
+    const loginEndpoint =
+      "https://dev-project-ecommerce.upgrad.dev/api/auth/signin";
+
     const credentials = {
       username: email,
       password: password,
     };
-  
+
     try {
       const response = await axios.post(loginEndpoint, credentials, {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" },
       });
 
-      console.log("response:", response);
-
-      // Log all headers
+      console.log("Response Data:", response.data);
       console.log("Response Headers:", response.headers);
 
-      // Get specific header
-      const authToken = response.headers['x-auth-token'];
-      console.log("X-Auth-Token:", authToken);
+      const authToken = response.headers["x-auth-token"];
+      const userRole = response.data.roles[0]; // Assuming the first role is the primary role
 
       if (authToken) {
+        // Store authToken and userRole in localStorage
         localStorage.setItem("authToken", authToken);
+        localStorage.setItem("userRole", userRole);
+
         alert("Login successful!");
         navigate("/home");
       } else {
         setError("Authentication token not found.");
       }
     } catch (error) {
-      console.error("Login Error:", error.response ? error.response.data : error.message);
-      setError(error.response?.data?.message || "An unexpected error occurred");
+      console.error(
+        "Login Error:",
+        error.response ? error.response.data : error.message
+      );
+      setError(
+        error.response?.data?.message || "An unexpected error occurred"
+      );
     }
   };
-  
+
   return (
     <div className="container">
       <FormControl size="medium">
@@ -94,7 +100,13 @@ const MuiLogin = () => {
               </Typography>
             )}
 
-            <Link href="#" color="inherit" variant="body2">
+            <Link
+              href="#"
+              color="inherit"
+              variant="body2"
+              onClick={() => navigate("/signup")}
+              style={{ cursor: "pointer" }}
+            >
               Don't have an account? Sign up
             </Link>
           </Stack>

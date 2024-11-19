@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { pink } from "@mui/material/colors";
 import { FormControl, TextField, Button, Link, Stack, Typography } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useNavigate } from "react-router-dom";
 
 const MuiSignUp = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -125,7 +127,7 @@ const MuiSignUp = () => {
           <Button variant="contained" color="primary" fullWidth onClick={handleSignUp}>
             Sign Up
           </Button>
-          <Link href="#" color="inherit" variant="body2">
+          <Link href="#" color="inherit" variant="body2" onClick={() => navigate("/login")}>
             Already have an account? Sign In
           </Link>
         </Stack>
