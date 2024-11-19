@@ -286,7 +286,7 @@ const MuiAddress = () => {
 
                 {/* Submit Button */}
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-                    <Button variant="outlined">
+                    <Button variant="outlined" onClick={() => navigate(-1)}>
                         BACK
                     </Button>
                     <Button variant="contained" onClick={handleSubmit}
@@ -294,16 +294,6 @@ const MuiAddress = () => {
                         NEXT
                     </Button>
                 </Box>
-                {/* <Box sx={{ marginTop: "20px", textAlign: "center" }}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                    disabled={!selectedAddress && !newAddress.name}
-                >
-                    Confirm
-                </Button>
-            </Box> */}
             </Box>
         </Box>
     );
