@@ -18,6 +18,11 @@ const MuiHome = () => {
   const productApiEndpoint = `${baseUrl}/products`;
   const categoriesApiEndpoint = `${baseUrl}/products/categories`;
 
+  const handleProductDelete = () => {
+    getProductList();
+    // setRefreshKey(prevKey => prevKey + 1);
+  };
+
   // Pass this to the ProductFilter component
   const handleSortChange = (newSortedProducts) => {
     setSortedProducts(newSortedProducts);
@@ -105,6 +110,7 @@ const MuiHome = () => {
             description={description}
             price={price}
             product={filteredProducts[index]}
+            onProductDelete={handleProductDelete}
           />
         ))}
       </Stack>
