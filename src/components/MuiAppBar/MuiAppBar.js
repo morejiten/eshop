@@ -1,9 +1,10 @@
 import { pink } from "@mui/material/colors";
-import { AppBar, Button, InputAdornment, Input, Toolbar, Stack, Typography, Box } from "@mui/material";
+import { AppBar, Button, InputAdornment, Input, Toolbar, Stack, Typography, Box, IconButton } from "@mui/material";
 import { Link as RouteLink, useNavigate } from "react-router-dom";
 import SearchRounded from "@mui/icons-material/SearchRounded";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const MuiAppBar = () => {
   const { isUserLoggedIn, isUserAdmin, logout } = useAuth();
@@ -39,6 +40,9 @@ const MuiAppBar = () => {
     <AppBar position="static">
       <Toolbar>
         {/* Logo */}
+        <IconButton edge="start" color="inherit" aria-label="menu">
+          <ShoppingCartIcon />
+        </IconButton>
         <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
           upGrad E-Shop
         </Typography>
