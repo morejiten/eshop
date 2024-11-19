@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Grid,
@@ -12,6 +12,12 @@ import {
 const MuiViewProduct = () => {
   const { state } = useLocation();
   const { product } = state;
+  const navigate = useNavigate();
+
+  const handlePlaceOrder = () => {
+    // Navigate to the address page and pass product details as state
+    navigate("/address", { state: { product } });
+  };
 
   return (
     <Box sx={{ flexGrow: 1, padding: 2 }}>
@@ -33,7 +39,7 @@ const MuiViewProduct = () => {
             <Typography variant="body2">{product.description}</Typography>
             <Typography variant="h5">Price: ₹{product.price}</Typography>
             <TextField id="quantity" label="Quantity" variant="outlined" fullWidth />
-            <Button variant="contained" color="primary" fullWidth>
+            <Button variant="contained" color="primary" fullWidth onClick={handlePlaceOrder}>
               Place Order
             </Button>
           </Stack>
