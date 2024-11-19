@@ -3,6 +3,7 @@ import MuiCard from "../MuiCard/MuiCard.js";
 import MuiFilter from "../MuiFilter/MuiFilter.js";
 import MuiToggleButtons from "../MuiToggleButtons/MuiToggleButtons.js";
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 const MuiHome = () => {
   const [products, setProducts] = useState([]);
@@ -10,6 +11,8 @@ const MuiHome = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortedProducts, setSortedProducts] = useState(products);
+
+  const navigate = useNavigate();
 
   const baseUrl = "https://dev-project-ecommerce.upgrad.dev/api";
   const productApiEndpoint = `${baseUrl}/products`;
@@ -67,9 +70,13 @@ const MuiHome = () => {
   }
 
   useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      navigate('/login'); // Redirect to login if authToken is not found
+    }
     getProductList();
     getCategoriesList();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="full-container">
