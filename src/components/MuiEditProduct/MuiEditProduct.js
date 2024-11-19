@@ -11,11 +11,12 @@ import {
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const MuiEditProduct = () => {
   const location = useLocation();
   const product = location.state?.product || {}; // Retrieve product data or use an empty object
+  const navigate = useNavigate();
 
   // States for form fields
   const [name, setName] = useState(product.name || "");
@@ -97,8 +98,9 @@ const MuiEditProduct = () => {
       });
 
       if (response.ok) {
-        const responseBody = await response.json();
-        console.log("Product updated successfully:", responseBody);
+        // const responseBody = await response.json();
+        // console.log("Product updated successfully:", responseBody);
+        navigate('/home');
         alert("Product updated successfully!");
       } else {
         const errorMessage = await response.text();

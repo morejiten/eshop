@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const MuiAddProduct = () => {
   // State variables
@@ -22,6 +23,8 @@ const MuiAddProduct = () => {
   const [availableItems, setAvailableItems] = useState(0);
   const [price, setPrice] = useState(0);
   const [imageUrl, setImageUrl] = useState("");
+
+  const navigate = useNavigate();
 
   // API endpoints
   const baseUrl = "https://dev-project-ecommerce.upgrad.dev/api";
@@ -69,7 +72,8 @@ const MuiAddProduct = () => {
     })
       .then((response) => {
         if (response.ok) {
-          return response.json(); // Parse JSON if request was successful
+          navigate('/home');
+          // return response.json(); // Parse JSON if request was successful
         } else {
           throw new Error("Failed to add product");
         }
@@ -82,6 +86,7 @@ const MuiAddProduct = () => {
         console.error("Error adding product:", error);
         alert("Failed to add product. Please try again.");
       });
+      
   };
 
 
