@@ -11,8 +11,10 @@ import {
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const MuiLogin = () => {
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -41,6 +43,7 @@ const MuiLogin = () => {
       const userRole = response.data.roles[0]; // Assuming the first role is the primary role
 
       if (authToken) {
+        login(authToken, userRole);
         // Store authToken and userRole in localStorage
         localStorage.setItem("authToken", authToken);
         localStorage.setItem("userRole", userRole);

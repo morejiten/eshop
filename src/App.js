@@ -17,33 +17,35 @@ import { BrowserRouter as Router, Link } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 import MuiAddress from './components/MuiAddress/MuiAddress.js';
 import MuiConfirmOrder from './components/MuiConfirmOrder/MuiConfirmOrder.js';
-;
+import { AuthProvider } from './components/context/AuthContext.js';
+
+
 function App() {
   return (
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <MuiAppBar />
 
-    <Router>
-      <div className="App">
-        <MuiAppBar />
+          <section id="bodyContent">
+            <Routes>
+              <Route exact path="/" element={<MuiHome />} />
+              <Route exact path="/home" element={<MuiHome />} />
+              <Route path="/viewProduct" element={<MuiViewProduct />} />
+              <Route path="/editProduct" element={<MuiEditProduct />} />
+              <Route path="/addProduct" element={<MuiAddProduct />} />
+              <Route path="/about" element={<MuiAppBar />} />
+              <Route path="/signUp" element={<MuiSignUp />} />
+              <Route path="/login" element={<MuiLogin />} />
+              <Route path="/address" element={<MuiAddress />} />
+              <Route path="/confirm-order" element={<MuiConfirmOrder />} />
+            </Routes>
+          </section>
+          <MuiFooter></MuiFooter>
+        </div>
 
-        <section id="bodyContent">
-          <Routes>
-            <Route exact path="/" element={<MuiHome />} />
-            <Route exact path="/home" element={<MuiHome />} />
-            <Route path="/viewProduct" element={<MuiViewProduct />} />
-            <Route path="/editProduct" element={<MuiEditProduct />} />
-            <Route path="/addProduct" element={<MuiAddProduct />} />
-            <Route path="/about" element={<MuiAppBar />} />
-            <Route path="/signUp" element={<MuiSignUp />} />
-            <Route path="/login" element={<MuiLogin />} />
-            <Route path="/address" element={<MuiAddress />} />
-            <Route path="/confirm-order" element={<MuiConfirmOrder />} />
-          </Routes>
-        </section>
-        <MuiFooter></MuiFooter>
-      </div>
-
-    </Router>
-
+      </Router>
+    </AuthProvider>
 
   );
 }

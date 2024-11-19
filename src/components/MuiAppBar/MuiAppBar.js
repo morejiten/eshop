@@ -3,30 +3,33 @@ import { AppBar, Button, InputAdornment, Input, Toolbar, Stack, Typography, Box 
 import { Link as RouteLink, useNavigate } from "react-router-dom";
 import SearchRounded from "@mui/icons-material/SearchRounded";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const MuiAppBar = () => {
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Default: not logged in
-  const [isUserAdmin, setIsUserAdmin] = useState(false); // Default: not admin
+  const { isUserLoggedIn, isUserAdmin, logout } = useAuth();
+  // const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Default: not logged in
+  // const [isUserAdmin, setIsUserAdmin] = useState(false); // Default: not admin
 
   const navigate = useNavigate();
 
   // Check login and admin status on component mount
-  useEffect(() => {
-    const authToken = localStorage.getItem("authToken");
-    setIsUserLoggedIn(!!authToken);
+  // useEffect(() => {
+  //   const authToken = localStorage.getItem("authToken");
+  //   setIsUserLoggedIn(!!authToken);
 
-    // Example: Mock admin check, update based on your app logic
-    const userRole = localStorage.getItem("userRole");
-    setIsUserAdmin(userRole?.toLowerCase() === "admin");
-  }, []);
+  //   // Example: Mock admin check, update based on your app logic
+  //   const userRole = localStorage.getItem("userRole");
+  //   setIsUserAdmin(userRole?.toLowerCase() === "admin");
+  // }, []);
 
   const handleLogout = () => {
+    logout();
     // Remove authToken and role from local storage
     localStorage.removeItem("authToken");
     localStorage.removeItem("userRole");
 
     // Update login state
-    setIsUserLoggedIn(false);
+    // setIsUserLoggedIn(false);
 
     // Redirect to the login page
     navigate("/login");
