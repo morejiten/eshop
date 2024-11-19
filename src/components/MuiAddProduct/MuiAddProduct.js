@@ -128,8 +128,8 @@ const MuiAddProduct = () => {
               >
                 {categories.length > 0 ? (
                   categories.map((category, index) => (
-                    <MenuItem key={index} value={category.toLowerCase()}>
-                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    <MenuItem key={index} value={category}>
+                      {category}
                     </MenuItem>
                   ))
                 ) : (
