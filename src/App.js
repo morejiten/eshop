@@ -16,6 +16,7 @@ import MuiHome from './components/MuiHome/MuiHome.js';
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 import MuiAddress from './components/MuiAddress/MuiAddress.js';
+import MuiConfirmOrder from './components/MuiConfirmOrder/MuiConfirmOrder.js';
 ;
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/signUp" element={<MuiSignUp />} />
             <Route path="/login" element={<MuiLogin />} />
             <Route path="/address" element={<MuiAddress />} />
+            <Route path="/confirm-order" element={<MuiConfirmOrder />} />
           </Routes>
         </section>
         <MuiFooter></MuiFooter>

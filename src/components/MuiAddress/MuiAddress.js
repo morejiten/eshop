@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
     Box,
     Typography,
@@ -11,16 +12,15 @@ import {
     InputLabel,
     TextField,
     Button,
-    Divider,
 } from "@mui/material";
-import { useLocation } from "react-router-dom";
 
 const MuiAddress = () => {
+    const navigate = useNavigate();
     const { state } = useLocation();
-    const { product } = state; // Extract product details
-
-    console.log(product);
+    const { product } = state;
+    
     const [selectedAddress, setSelectedAddress] = useState("");
+    const [addresses, setAddresses] = useState([]);
     const [newAddress, setNewAddress] = useState({
         name: "",
         contact: "",
@@ -30,7 +30,6 @@ const MuiAddress = () => {
         landmark: "",
         zip: "",
     });
-    const [addresses, setAddresses] = useState([]);
 
     const token = localStorage.getItem('authToken');
 
@@ -45,14 +44,14 @@ const MuiAddress = () => {
                     },
                 });
                 const data = await response.json();
-                setAddresses(data); // Assuming the response is an array of address objects
+                setAddresses(data);
             } catch (error) {
                 console.error("Error fetching addresses:", error);
             }
         };
 
         fetchAddresses();
-    }, []);
+    }, [token]);
 
     const handleAddressChange = (e) => {
         setSelectedAddress(e.target.value);
@@ -63,8 +62,65 @@ const MuiAddress = () => {
         setNewAddress({ ...newAddress, [name]: value });
     };
 
-    const handleSubmit = () => {
-        console.log("Address Submitted:", selectedAddress || newAddress);
+    const handleSubmit = async () => {
+        // If a new address is being added, first save it
+        let addressId = selectedAddress;
+        
+        if (!selectedAddress && newAddress.name) {
+            try {
+                const response = await fetch('https://dev-project-ecommerce.upgrad.dev/api/addresses', {
+                    method: 'POST',
+                    headers: {
+                        'x-auth-token': token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newAddress),
+                });
+                const data = await response.json();
+                addressId = data.id; // Assuming the API returns the new address ID
+            } catch (error) {
+                console.error("Error saving new address:", error);
+                return;
+            }
+        }
+
+        // Navigate to confirm order page with necessary details
+        navigate('/confirm-order', {
+            state: {
+                product: product,
+                address: addressId,
+                addressDetails: selectedAddress 
+                    ? addresses.find(addr => addr.id === selectedAddress)
+                    : newAddress
+            }
+        });
+    };
+
+    const handlePlaceOrder = async () => {
+        try {
+            const response = await fetch('https://dev-project-ecommerce.upgrad.dev/api/orders', {
+                method: 'POST',
+                headers: {
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    quantity: product.quantity || 1,
+                    product: product.id,
+                    address: selectedAddress || newAddress.id,
+                }),
+            });
+            
+            if (response.ok) {
+                // Navigate to order success page or show confirmation
+                navigate('/order-success');
+            } else {
+                throw new Error('Order placement failed');
+            }
+        } catch (error) {
+            console.error("Error placing order:", error);
+            // Handle error - show error message to user
+        }
     };
 
     return (
@@ -85,18 +141,19 @@ const MuiAddress = () => {
             {/* Select Address */}
             <Box sx={{ marginTop: "20px" }}>
                 <FormControl fullWidth>
-                    <InputLabel>Select Address</InputLabel>
+                    <InputLabel sx={{ top: "-8px" }}>Select Address</InputLabel>
                     <Select
                         value={selectedAddress}
                         onChange={handleAddressChange}
                         displayEmpty
+                        sx={{ width: "100%" }}
                     >
                         <MenuItem value="">
                             <em>Select...</em>
                         </MenuItem>
                         {addresses.map((address) => (
                             <MenuItem key={address.id} value={address.id}>
-                                {address.name} - {address.city} {/* Customize display */}
+                                {address.name} - {address.street}, {address.city}
                             </MenuItem>
                         ))}
                     </Select>
