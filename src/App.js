@@ -12,7 +12,7 @@ import MuiAddProduct from './components/MuiAddProduct/MuiAddProduct.js';
 import MuiEditProduct from './components/MuiEditProduct/MuiEditProduct.js';
 import MuiViewProduct from './components/MuiViewProduct/MuiViewProduct.js';
 import MuiHome from './components/MuiHome/MuiHome.js';
-
+import MuiSearchResult from './components/MuiSearchResult/MuiSearchResult.js';
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 import MuiAddress from './components/MuiAddress/MuiAddress.js';
@@ -31,6 +31,7 @@ function App() {
             <Routes>
               <Route exact path="/" element={<MuiHome />} />
               <Route exact path="/home" element={<MuiHome />} />
+              <Route exact path="/searchResult" element={<MuiSearchResult />} />
               <Route path="/viewProduct" element={<MuiViewProduct />} />
               <Route path="/editProduct" element={<MuiEditProduct />} />
               <Route path="/addProduct" element={<MuiAddProduct />} />

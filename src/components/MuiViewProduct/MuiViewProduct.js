@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -11,13 +11,31 @@ import {
   Alert,
 } from "@mui/material";
 
-const MuiViewProduct = () => {
-  const { state } = useLocation();
-  const { product } = state;
+const MuiViewProduct = ({name}) => {
+  
+  const currSessionProduct =JSON.parse(sessionStorage.getItem("currentProduct"))  || {};
+  
+   const { state:inwardState = "" } = useLocation();
+   
+  let  myProduct   = useLocation().state?.product ?? JSON.parse(sessionStorage.getItem("currentProduct")); // conditional 
+
+  
+
   const navigate = useNavigate();
+  const [one, setOne] = useState({});
+
   const [quantity, setQuantity] = useState(1); // Default quantity is 1
   const [error, setError] = useState("");
 
+if( myProduct === undefined){
+  
+  const currProduct =JSON.parse(sessionStorage.getItem("currentProduct")) ;
+  myProduct =  currProduct;
+  window.location.reload();
+  
+  }
+
+  
   const handleQuantityChange = (event) => {
     const value = parseInt(event.target.value) || 0;
     setQuantity(value);
@@ -25,8 +43,8 @@ const MuiViewProduct = () => {
     // Validate quantity
     if (value <= 0) {
       setError("Quantity must be greater than 0");
-    } else if (value > product.availableItems) {
-      setError(`Only ${product.availableItems} items available`);
+    } else if (value > myProduct.availableItems) {
+      setError(`Only ${myProduct.availableItems} items available`);
     } else {
       setError("");
     }
@@ -39,20 +57,20 @@ const MuiViewProduct = () => {
       return;
     }
     
-    if (quantity > product.availableItems) {
-      setError(`Only ${product.availableItems} items available`);
+    if (quantity > myProduct.availableItems) {
+      setError(`Only ${myProduct.availableItems} items available`);
       return;
     }
 
     // Create a new product object with quantity
     const productWithQuantity = {
-      ...product,
+      ...myProduct,
       quantity: quantity,
-      totalPrice: quantity * product.price
+      totalPrice: quantity * myProduct.price
     };
 
     // Navigate to the address page and pass product details as state
-    navigate("/address", { state: { product: productWithQuantity } });
+    navigate("/address", { state: { myProduct: productWithQuantity } });
   };
 
   return (
@@ -60,8 +78,8 @@ const MuiViewProduct = () => {
       <Grid container spacing={2} columns={16}>
         <Grid item xs={8}>
           <img 
-            src={product.imageUrl} 
-            alt={product.name} 
+            src={myProduct?.imageUrl} 
+            alt={myProduct.name} 
             style={{ 
               width: "100%",
               maxHeight: "500px",
@@ -72,16 +90,16 @@ const MuiViewProduct = () => {
         <Grid item xs={8}>
           <Stack spacing={2}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <Typography variant="h5">{product.name}</Typography>
+              <Typography variant="h5">{myProduct.name}</Typography>
               <Chip
-                label={`Available Quantity: ${product.availableItems}`}
-                color={product.availableItems > 0 ? "primary" : "error"}
+                label={`Available Quantity: ${myProduct.availableItems}`}
+                color={myProduct.availableItems > 0 ? "primary" : "error"}
                 size="small"
               />
             </Box>
-            <Typography variant="body2">Category: {product.category}</Typography>
-            <Typography variant="body2">{product.description}</Typography>
-            <Typography variant="h5">Price: ₹{product.price}</Typography>
+            <Typography variant="body2">Category: {myProduct.category}</Typography>
+            <Typography variant="body2">{myProduct.description}</Typography>
+            <Typography variant="h5">Price: ₹{myProduct.price}</Typography>
             
             <TextField
               id="quantity"
@@ -93,7 +111,7 @@ const MuiViewProduct = () => {
               onChange={handleQuantityChange}
               inputProps={{ 
                 min: 1, 
-                max: product.availableItems,
+                max: myProduct.availableItems,
                 step: 1
               }}
               error={!!error}
@@ -103,7 +121,7 @@ const MuiViewProduct = () => {
             {/* Show total price when quantity > 1 */}
             {quantity > 1 && !error && (
               <Typography variant="body1" color="primary">
-                Total Price: ₹{(quantity * product.price).toFixed(2)}
+                Total Price: ₹{(quantity * myProduct.price).toFixed(2)}
               </Typography>
             )}
 
@@ -112,13 +130,13 @@ const MuiViewProduct = () => {
               color="primary"
               fullWidth
               onClick={handlePlaceOrder}
-              disabled={!!error || quantity <= 0 || quantity > product.availableItems}
+              disabled={!!error || quantity <= 0 || quantity > myProduct.availableItems}
             >
               Place Order
             </Button>
 
             {/* Show out of stock message if no items available */}
-            {product.availableItems <= 0 && (
+            {myProduct.availableItems <= 0 && (
               <Alert severity="error">
                 This product is currently out of stock
               </Alert>
