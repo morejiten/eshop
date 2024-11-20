@@ -5,7 +5,7 @@ import MuiToggleButtons from "../MuiToggleButtons/MuiToggleButtons.js";
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-const MuiHome = () => {
+const MuiHome = ({ searchTerm }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -20,36 +20,29 @@ const MuiHome = () => {
 
   const handleProductDelete = () => {
     getProductList();
-    // setRefreshKey(prevKey => prevKey + 1);
   };
 
-  // Pass this to the ProductFilter component
   const handleSortChange = (newSortedProducts) => {
     setSortedProducts(newSortedProducts);
   };
 
-  // Handle category change
   const handleCategoryChange = (category) => {
     console.log("Category changed to:", category);
     setSelectedCategory(category);
-
     if (category === 'all') {
       setFilteredProducts(products);
     } else {
-      const filtered = products.filter(
-        product => product.category.toLowerCase() === category.toLowerCase()
+      const filtered = products.filter(product =>
+        product.category.toLowerCase() === category.toLowerCase()
       );
-      console.log("Filtered products:", filtered);
       setFilteredProducts(filtered);
     }
   };
 
   function getCategoriesList() {
-    console.log("Fetching categories from API");
     fetch(categoriesApiEndpoint)
       .then(response => response.json())
       .then(data => {
-        console.log("Categories API Response:", data);
         setCategories(data);
       })
       .catch(error => {
@@ -59,13 +52,11 @@ const MuiHome = () => {
   }
 
   function getProductList() {
-    console.log("Fetching products from API");
     fetch(productApiEndpoint)
       .then(response => response.json())
       .then(data => {
-        console.log("Products API Response:", data);
         setProducts(data);
-        setFilteredProducts(data); // Initialize filtered products with all products
+        setFilteredProducts(data);
       })
       .catch(error => {
         console.error("Error fetching products:", error);
@@ -77,11 +68,23 @@ const MuiHome = () => {
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      navigate('/login'); // Redirect to login if authToken is not found
+      navigate('/login');
     }
     getProductList();
     getCategoriesList();
   }, [navigate]);
+
+  useEffect(() => {
+    console.log("Filtering products based on search term:", searchTerm);  // Log searchTerm
+    if (searchTerm) {
+      const searchFiltered = products.filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredProducts(searchFiltered);
+    } else {
+      setFilteredProducts(products);  // Reset to all products if searchTerm is empty
+    }
+  }, [searchTerm, products]);
 
   return (
     <div className="full-container">
@@ -93,7 +96,6 @@ const MuiHome = () => {
         />
       </Stack>
       <Stack alignItems="left" direction="row" spacing={20} sx={{ width: 700 }}>
-        {/* Pass products and handleSortChange to MuiFilter */}
         <MuiFilter products={filteredProducts} onSortChange={setFilteredProducts} />
       </Stack>
       <Stack

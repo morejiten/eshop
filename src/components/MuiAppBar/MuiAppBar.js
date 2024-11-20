@@ -6,40 +6,26 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-const MuiAppBar = () => {
+const MuiAppBar = ({ searchTerm, onSearch }) => {
   const { isUserLoggedIn, isUserAdmin, logout } = useAuth();
-  // const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Default: not logged in
-  // const [isUserAdmin, setIsUserAdmin] = useState(false); // Default: not admin
-
   const navigate = useNavigate();
-
-  // Check login and admin status on component mount
-  // useEffect(() => {
-  //   const authToken = localStorage.getItem("authToken");
-  //   setIsUserLoggedIn(!!authToken);
-
-  //   // Example: Mock admin check, update based on your app logic
-  //   const userRole = localStorage.getItem("userRole");
-  //   setIsUserAdmin(userRole?.toLowerCase() === "admin");
-  // }, []);
 
   const handleLogout = () => {
     logout();
-    // Remove authToken and role from local storage
     localStorage.removeItem("authToken");
     localStorage.removeItem("userRole");
-
-    // Update login state
-    // setIsUserLoggedIn(false);
-
-    // Redirect to the login page
     navigate("/login");
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    console.log("Search term updated:", value);  // Log the updated value
+    onSearch(value); // Pass search term to parent component
   };
 
   return (
     <AppBar position="static">
       <Toolbar>
-        {/* Logo */}
         <IconButton edge="start" color="inherit" aria-label="menu">
           <ShoppingCartIcon />
         </IconButton>
@@ -47,33 +33,26 @@ const MuiAppBar = () => {
           upGrad E-Shop
         </Typography>
 
-        {/* Spacer */}
         <Box sx={{ flexGrow: 1 }} />
 
-        {/* Navigation Links */}
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
           <Stack spacing={4} direction="row" alignItems="center">
-            {/* Show Home, Search bar, and Add Product for logged-in users */}
             {isUserLoggedIn && (
               <>
                 <Input
                   id="input-with-icon-adornment"
                   placeholder="Search..."
                   className="globalSearch"
+                  value={searchTerm}  // Use the searchTerm passed from App.js
+                  onChange={handleSearchChange}
                   startAdornment={
                     <InputAdornment position="start">
                       <SearchRounded sx={{ color: pink[500] }} />
                     </InputAdornment>
                   }
                 />
-                <RouteLink to="/home" className="route-link">
-                  Home
-                </RouteLink>
-                {isUserAdmin && (
-                  <RouteLink to="/addProduct" className="route-link">
-                    Add Product
-                  </RouteLink>
-                )}
+                <RouteLink to="/home" className="route-link">Home</RouteLink>
+                {isUserAdmin && <RouteLink to="/addProduct" className="route-link">Add Product</RouteLink>}
                 <Button
                   variant="contained"
                   color="default"
@@ -85,15 +64,10 @@ const MuiAppBar = () => {
               </>
             )}
 
-            {/* Show Login and Signup for non-logged-in users */}
             {!isUserLoggedIn && (
               <>
-                <RouteLink to="/login" className="route-link">
-                  Login
-                </RouteLink>
-                <RouteLink to="/signUp" className="route-link">
-                  Signup
-                </RouteLink>
+                <RouteLink to="/login" className="route-link">Login</RouteLink>
+                <RouteLink to="/signUp" className="route-link">Signup</RouteLink>
               </>
             )}
           </Stack>

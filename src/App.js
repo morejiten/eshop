@@ -18,19 +18,21 @@ import { Routes, Route } from "react-router-dom";
 import MuiAddress from './components/MuiAddress/MuiAddress.js';
 import MuiConfirmOrder from './components/MuiConfirmOrder/MuiConfirmOrder.js';
 import { AuthProvider } from './components/context/AuthContext.js';
-
+import { useState, useEffect } from "react";
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState("");
+
   return (
     <AuthProvider>
       <Router>
         <div className="App">
-          <MuiAppBar />
+          <MuiAppBar searchTerm={searchTerm} onSearch={setSearchTerm} />
 
           <section id="bodyContent">
             <Routes>
-              <Route exact path="/" element={<MuiHome />} />
-              <Route exact path="/home" element={<MuiHome />} />
+              <Route exact path="/" element={<MuiHome searchTerm={searchTerm} />} />
+              <Route exact path="/home" element={<MuiHome searchTerm={searchTerm} />} />
               <Route path="/viewProduct" element={<MuiViewProduct />} />
               <Route path="/editProduct" element={<MuiEditProduct />} />
               <Route path="/addProduct" element={<MuiAddProduct />} />
@@ -41,17 +43,11 @@ function App() {
               <Route path="/confirm-order" element={<MuiConfirmOrder />} />
             </Routes>
           </section>
-          <MuiFooter></MuiFooter>
+          <MuiFooter />
         </div>
-
       </Router>
     </AuthProvider>
-
   );
 }
 
-
 export default App;
-
-
-
