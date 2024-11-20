@@ -6,6 +6,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### 'npm Install'
+
 ### `npm start`
 
 Runs the app in the development mode.\
@@ -68,5 +70,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
 ### Download CORS Unblock 
-If you are unable to login then download CORS unblock extension from extension store then pin it in the URL bar after that right click the icon and make sure Enable Access-Control-[Allow/Expose]-header is marked then start the CORS extension after that you would be able to login in.
+If you are unable to login then download CORS unblock extension from extension store shown in the image ( https://imgur.com/a/EpUgs0i ) then pin it in the URL bar after that right click the icon and make sure Enable Access-Control-[Allow/Expose]-header is marked shown in the image ( https://imgur.com/a/t9uFGV8 ) then start the CORS extension after that you would be able to login in.
