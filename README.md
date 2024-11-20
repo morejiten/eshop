@@ -1,6 +1,7 @@
 # Upgrad Eshop
 
 ## Pre-requisites
+1. NodeJS version 18+
 1. CORS Unblock plugin
 If you are running this project from `localhost` then you would need to unblock CORS to allow reading the response headers. You can use any plugin of your choice. Here is the one which works. 
 
@@ -14,8 +15,12 @@ If you are running this project from `localhost` then you would need to unblock 
 ## Running the project
 After you clone the project you need to run this command from the root folder to be able to run it.
 ```
+npm install
 npm start
 ```
+
+`npm install` is required to install the dependencies.
+
 Post this the application will be available at http://localhost:3000
 
 ## Demo video
