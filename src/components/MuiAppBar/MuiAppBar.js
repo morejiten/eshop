@@ -1,27 +1,29 @@
 import { pink } from "@mui/material/colors";
 import { AppBar, Button, InputAdornment, Input, Toolbar, Stack, Typography, Box, IconButton } from "@mui/material";
-import { Link as RouteLink, useNavigate } from "react-router-dom";
+import { Link as RouteLink, useNavigate, useLocation } from "react-router-dom";
+
 import SearchRounded from "@mui/icons-material/SearchRounded";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import axios from "axios";
+
+import './MuiAppBar.css';
 
 const MuiAppBar = () => {
+  const [searchProduct, setSearchProduct] = useState("")
+  const [products, setProducts] = useState([]);
   const { isUserLoggedIn, isUserAdmin, logout } = useAuth();
-  // const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Default: not logged in
-  // const [isUserAdmin, setIsUserAdmin] = useState(false); // Default: not admin
 
+  const product = useLocation()?.state?.product;
+
+
+  const token = localStorage.getItem('authToken');
+
+  const baseUrl = "https://dev-project-ecommerce.upgrad.dev/api";
+  const productApiEndpoint = `${baseUrl}/products`;
   const navigate = useNavigate();
 
-  // Check login and admin status on component mount
-  // useEffect(() => {
-  //   const authToken = localStorage.getItem("authToken");
-  //   setIsUserLoggedIn(!!authToken);
-
-  //   // Example: Mock admin check, update based on your app logic
-  //   const userRole = localStorage.getItem("userRole");
-  //   setIsUserAdmin(userRole?.toLowerCase() === "admin");
-  // }, []);
 
   const handleLogout = () => {
     logout();
@@ -29,12 +31,76 @@ const MuiAppBar = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userRole");
 
-    // Update login state
-    // setIsUserLoggedIn(false);
-
     // Redirect to the login page
     navigate("/login");
   };
+
+  const handleSearchPrductInputChange = (e) => {
+    getProductList(e);
+    const searchInput = e.target.value;
+    setSearchProduct(searchInput);
+  
+  }
+
+
+  function getProductList(e) {
+    console.log("Fetching products from API");
+    fetch(productApiEndpoint)
+      .then(response => response.json())
+      .then(data => {
+        console.log("Products API Response:", data);
+
+        // filter the list
+        const filteredProducts = data.filter((product) =>
+          product.name.toLowerCase().includes(e.target.value.toLowerCase())
+        );
+
+        setProducts(filteredProducts);
+     })
+      .catch(error => {
+        console.error("Error fetching products:", error);
+        setProducts([]);
+
+      });
+  }
+
+  const viewProduct = async (e, prodId) => {
+    console.log("prodId00000", prodId);
+    try {
+      // Replace with actual API URL
+      const response = await axios.get(
+        `https://dev-project-ecommerce.upgrad.dev/api/products/${prodId}`,
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      );
+      navigate("/viewProduct", { state: { product: response.data } });
+    } catch (error) {
+      console.error("Error fetching product details:", error);
+    }
+  };
+
+  const viewSearchResults = async () => {
+
+    try {
+      navigate("/searchResult", { state: { product: products } });
+    } catch (error) {
+      console.error("Error fetching product details:", error);
+    }
+  };
+
+  useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      navigate('/login'); // Redirect to login if authToken is not found
+    }
+  }, []);
+
+
+
+
 
   return (
     <AppBar position="static">
@@ -60,12 +126,33 @@ const MuiAppBar = () => {
                   id="input-with-icon-adornment"
                   placeholder="Search..."
                   className="globalSearch"
+                  value={searchProduct}
+                  onChange={handleSearchPrductInputChange}
                   startAdornment={
                     <InputAdornment position="start">
                       <SearchRounded sx={{ color: pink[500] }} />
                     </InputAdornment>
                   }
                 />
+                <ul className="quick-search-container">
+                  {
+                    products.map((product) => {
+
+                      return (<li key={product.id} >
+                        <a href="#"
+
+                          onClick={(e) => viewProduct(e, product.id)}
+                        >
+                          {product.name}
+                        </a>
+                      </li>
+                      )
+
+                    })
+
+                  }
+                  <li><a onClick={(e) => viewSearchResults()}>{"view all result - >"}</a> </li>
+                </ul>
                 <RouteLink to="/home" className="route-link">
                   Home
                 </RouteLink>

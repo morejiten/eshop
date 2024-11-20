@@ -1,0 +1,30 @@
+.quick-search-container {
+    position: absolute;
+    top: 51px;
+    background: white;
+    float: left;
+    color: black;
+    padding: 15px;
+    list-style: none;
+    text-align: left;
+    border: 1px solid gray;
+    z-index: 99;
+}
+
+
+.quick-search-container li {
+    padding: 10px 0;
+}
+
+.quick-search-container li a {
+    color: blue;
+    text-decoration: underline;
+}
+
+.quick-search-container li a:hover {
+    color: #e91e63;
+}
+
+.quick-search-container li:last-child a {
+    color: #e91e63;
+}
