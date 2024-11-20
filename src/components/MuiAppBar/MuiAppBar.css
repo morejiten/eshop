@@ -28,3 +28,8 @@
 .quick-search-container li:last-child a {
     color: #e91e63;
 }
+
+#input-with-icon-adornment:focus {
+
+    
+}

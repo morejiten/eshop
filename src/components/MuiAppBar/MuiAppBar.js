@@ -16,7 +16,7 @@ const MuiAppBar = () => {
   const { isUserLoggedIn, isUserAdmin, logout } = useAuth();
 
   const product = useLocation()?.state?.product;
-
+  const location = useLocation();
 
   const token = localStorage.getItem('authToken');
 
@@ -39,7 +39,7 @@ const MuiAppBar = () => {
     getProductList(e);
     const searchInput = e.target.value;
     setSearchProduct(searchInput);
-  
+
   }
 
 
@@ -56,7 +56,7 @@ const MuiAppBar = () => {
         );
 
         setProducts(filteredProducts);
-     })
+      })
       .catch(error => {
         console.error("Error fetching products:", error);
         setProducts([]);
@@ -65,7 +65,6 @@ const MuiAppBar = () => {
   }
 
   const viewProduct = async (e, prodId) => {
-    console.log("prodId00000", prodId);
     try {
       // Replace with actual API URL
       const response = await axios.get(
@@ -76,7 +75,18 @@ const MuiAppBar = () => {
           },
         }
       );
-      navigate("/viewProduct", { state: { product: response.data } });
+      // if quick search performed on viwe product page, dont use routes
+      if (location.pathname == "/viewProduct") {
+        sessionStorage.setItem("currentProduct", JSON.stringify(response.data))
+        window.location.reload();
+      } else {
+        navigate("/viewProduct", { state: { product: response.data } });
+      }
+
+
+
+      // hide result result 
+      setProducts([]);
     } catch (error) {
       console.error("Error fetching product details:", error);
     }
@@ -151,7 +161,11 @@ const MuiAppBar = () => {
                     })
 
                   }
-                  <li><a onClick={(e) => viewSearchResults()}>{"view all result - >"}</a> </li>
+
+
+                  {products.length > 0 ?
+                    (<li><a onClick={(e) => viewSearchResults()}>{"view all result - >"}</a> </li>) : null
+                  }
                 </ul>
                 <RouteLink to="/home" className="route-link">
                   Home
